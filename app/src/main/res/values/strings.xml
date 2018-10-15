@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">alex_bou</string>
+    <string name="app_name" translatable="false">alex_bou</string>
+    <string name="btnPlay">Play</string>
+    <string name="btnRanking">Ranking</string>
+    <string name="btnSetting">Settings</string>
+    <string name="btnAbout">About...</string>
 </resources>
