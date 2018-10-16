@@ -4,4 +4,6 @@
     <string name="btnRanking">Ranking</string>
     <string name="btnSetting">Settings</string>
     <string name="btnAbout">About...</string>
+    <string name="app">App</string>
+    <string name="team">Team</string>
 </resources>
