@@ -17,4 +17,6 @@
     <string name="title_activity_maps">Map</string>
     <string name="stucomLocation">Stucom location</string>
     <string name="titleStucom">Stucom centre d\'Estudis</string>
+    <string name="inputName">Username</string>
+    <string name="inputEmail">Email</string>
 </resources>

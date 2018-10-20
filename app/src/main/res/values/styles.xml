@@ -10,6 +10,8 @@
         <item name="android:colorForeground">@color/foreground_material_light</item>
         <item name="android:windowBackground">@drawable/background</item>
         <item name="colorButtonNormal">@color/customPrimary</item>
+        <item name="android:colorBackground">@color/background_material_light</item>
+        <item name="android:textColorPrimaryInverse">@color/primary_text_material_dark</item>
     </style>
 
 </resources>
