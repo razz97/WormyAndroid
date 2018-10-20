@@ -6,4 +6,15 @@
     <string name="btnAbout">About...</string>
     <string name="app">App</string>
     <string name="team">Team</string>
+    <string name="txtAboutUs">This app was developed by Alex Bou, currently studying a course in cross-platform app development in Stucom centre d\'estudis, check where you can find us by tapping the button below.</string>
+    <string name="txtAboutApp">This app is under development, in this release you can tap the settings functionality to save your data persistently, no need to press any button to save it\'s an automated procedure.</string>
+    <string name="subTitleAboutUs">Team</string>
+    <string name="subTitleAboutApp">App</string>
+    <string name="imgInfo">info icon</string>
+    <string name="imgUs">team image</string>
+    <string name="btnMap">Where we work</string>
+    <string name="txtMenu">Menu</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="stucomLocation">Stucom location</string>
+    <string name="titleStucom">Stucom centre d\'Estudis</string>
 </resources>
