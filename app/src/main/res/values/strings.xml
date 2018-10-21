@@ -19,4 +19,8 @@
     <string name="titleStucom">Stucom centre d\'Estudis</string>
     <string name="inputName">Username</string>
     <string name="inputEmail">Email</string>
+    <string name="txtSetting">Hint: tap on the image to change it.</string>
+    <string name="imgDialogTitle">Select a source for your image</string>
+    <string name="txtGallery">Gallery</string>
+    <string name="txtCamera">Camera</string>
 </resources>

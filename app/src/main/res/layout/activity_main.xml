@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -24,24 +23,28 @@
             android:id="@+id/btnPlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btnPlay" />
+            android:text="@string/btnPlay"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btnRanking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btnRanking" />
+            android:text="@string/btnRanking"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btnSetting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btnSetting" />
+            android:text="@string/btnSetting"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btnAbout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/btnAbout" />
+            android:text="@string/btnAbout"
+            android:textColor="@color/white" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

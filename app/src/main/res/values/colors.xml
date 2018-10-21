@@ -4,10 +4,13 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#f8ffe5</color>
     <color name="white">#ffffff</color>
-    <color name="blue">#0000FF</color>
-    <color name="customPrimary">#44ae7d</color>
-    <color name="customPrimaryDark">#FF358A63</color>
+    <color name="blue">#5bc0de</color>
+    <color name="customPrimary">#237fad</color>
+    <color name="customPrimaryDark">#185878</color>
     <color name="foreground_material_light">#000000</color>
     <color name="background_material_light">#f8ffe5</color>
     <color name="primary_text_material_dark">#f8ffe5</color>
+    <color name="text_color_primary">#000000</color>
+    <color name="niceRed">#ea5252</color>
+    <color name="niceDarkRed">#a23838</color>
 </resources>
