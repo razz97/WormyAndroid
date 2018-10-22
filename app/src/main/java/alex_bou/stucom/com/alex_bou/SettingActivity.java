@@ -11,8 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,58 +20,36 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private final int GALLERY_IMAGE_REQUEST = 1;
-    private final int CAMERA_IMAGE_REQUEST = 2;
-    private File imgFile;
-    private CircleImageView imgProfile;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editorPrefs;
+    final int GALLERY_IMAGE_REQUEST = 1;
+    final int CAMERA_IMAGE_REQUEST = 2;
+    TextInputEditText inputName;
+    TextInputEditText inputEmail;
+    File imgFile;
+    CircleImageView imgProfile;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editorPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set layout to display.
         setContentView(R.layout.activity_setting);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         // Get shared preferences.
         prefs = getPreferences(MODE_PRIVATE);
 
-        // Get text inputs from layout.
-        TextInputEditText inputName = findViewById(R.id.inputName);
-        TextInputEditText inputEmail = findViewById(R.id.inputEmail);
+        // Get layout objects from layout.
+        inputName = findViewById(R.id.inputName);
+        inputEmail = findViewById(R.id.inputEmail);
+        imgProfile = findViewById(R.id.imgProfile);
 
         // Set text inputs value if already saved in shared preferences, else set to empty string.
         inputName.setText(prefs.getString("name",""));
         inputEmail.setText(prefs.getString("email",""));
-
-        // Add listener to inputs: when its text changes values are saved in shared preferences.
-        inputName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                editorPrefs = prefs.edit();
-                editorPrefs.putString("name",s.toString());
-                editorPrefs.apply();
-            }
-        });
-        inputEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {
-                editorPrefs = prefs.edit();
-                editorPrefs.putString("email",s.toString());
-                editorPrefs.apply();
-            }
-        });
-
-        // Get image view from layout.
-        imgProfile = findViewById(R.id.imgProfile);
 
         // Get image file from internal files directory.
         imgFile = new File(getFilesDir(), "imgProfile.jpg");
@@ -82,8 +58,16 @@ public class SettingActivity extends AppCompatActivity {
         if (imgFile.exists()) {
             imgProfile.setImageURI(Uri.fromFile(imgFile));
         }
+    }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Save email and name to shared preferences
+        editorPrefs = prefs.edit();
+        editorPrefs.putString("email",inputEmail.getText().toString());
+        editorPrefs.putString("name",inputName.getText().toString());
+        editorPrefs.apply();
     }
 
     @Override
@@ -107,6 +91,10 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves image to application's internal storage.
+     * @param bitmapImage bitmap representing image.
+     */
     private void saveImageFromBitmap(Bitmap bitmapImage) {
         FileOutputStream fos = null;
         try {
@@ -124,11 +112,15 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Shows dialog asking to choose from picking from gallery or taking a picture.
+     * @param v image view
+     */
     public void onImageClick(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.imgDialogTitle);
-        String[] animals = {getString(R.string.txtGallery), getString(R.string.txtCamera)};
-        builder.setItems(animals, new DialogInterface.OnClickListener() {
+        String[] options = {getString(R.string.txtGallery), getString(R.string.txtCamera)};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -146,4 +138,6 @@ public class SettingActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 }
