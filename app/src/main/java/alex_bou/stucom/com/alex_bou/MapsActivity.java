@@ -12,11 +12,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set layout to display.
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -36,10 +35,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        //41.385765, 2.165173
+
+        //41.385765, 2.165173 --> Stucom's location
+        // Instantiates google's LatLng class: this is used to store latitude and longitude.
         LatLng stucom = new LatLng(41.385765, 2.165173);
-        mMap.addMarker(new MarkerOptions().position(stucom).title(getString(R.string.titleStucom)));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(stucom));
+        // Instantiates a Marker, sets its position and title to Stucom, then adds it to the map.
+        googleMap.addMarker(new MarkerOptions().position(stucom).title(getString(R.string.titleStucom)));
+        // Updates display location to Stucom's.
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(stucom));
     }
 }

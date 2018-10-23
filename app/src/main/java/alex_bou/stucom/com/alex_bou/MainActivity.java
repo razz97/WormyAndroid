@@ -11,40 +11,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set layout to display
         setContentView(R.layout.activity_main);
 
-        Button btnPlay = findViewById(R.id.btnPlay);
-        btnPlay.setOnClickListener(new View.OnClickListener() {
+        // Get buttons from its id and set onClick listener for starting its corresponding activity.
+        findViewById(R.id.btnPlay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToPlay = new Intent(MainActivity.this,PlayActivity.class);
+                Intent goToPlay = new Intent(MainActivity.this, PlayActivity.class);
                 startActivity(goToPlay);
             }
         });
-
-        Button btnRanking = findViewById(R.id.btnRanking);
-        btnRanking.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnRanking).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToRanking = new Intent(MainActivity.this,RankingActivity.class);
+                Intent goToRanking = new Intent(MainActivity.this, RankingActivity.class);
                 startActivity(goToRanking);
             }
         });
-
-        Button btnSetting = findViewById(R.id.btnSetting);
-        btnSetting.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnSetting).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToSettings = new Intent(MainActivity.this,SettingActivity.class);
+                Intent goToSettings = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(goToSettings);
             }
         });
-
-        Button btnAbout = findViewById(R.id.btnAbout);
-        btnAbout.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnAbout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent goToAbout = new Intent(MainActivity.this,AboutActivity.class);
+                Intent goToAbout = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(goToAbout);
             }
         });
