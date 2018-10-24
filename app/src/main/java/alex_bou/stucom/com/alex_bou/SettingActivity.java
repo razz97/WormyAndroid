@@ -86,7 +86,8 @@ public class SettingActivity extends AppCompatActivity {
             // Delete last image saved in internal storage.
             imgFile.delete();
             try {
-                // Try to fetch bitmap from media store.
+                // Try to fetch bitmap from media store. It was the easiest way to store it in internal memory,
+                // this way I can still access the picture when deleted from the gallery.
                 Bitmap bitmapImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                 // Save bitmap in internal storage see method below.
                 saveImageFromBitmap(bitmapImage);
@@ -139,7 +140,7 @@ public class SettingActivity extends AppCompatActivity {
         // Set title for the dialog
         builder.setTitle(R.string.imgDialogTitle);
         // Generate options.
-        String[] options = {getString(R.string.txtGallery), getString(R.string.txtCamera)};
+        String[] options = {getString(R.string.txtGallery), getString(R.string.txtCamera),getString(R.string.txtDelete)};
         // Set items and its onClick function.
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
@@ -152,6 +153,10 @@ public class SettingActivity extends AppCompatActivity {
                     case 1: // camera selected
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(intent,CAMERA_IMAGE_REQUEST);
+                        break;
+                    case 2: // delete selected
+                        imgFile.delete();
+                        imgProfile.setImageResource(R.drawable.usr);
                 }
             }
         });
