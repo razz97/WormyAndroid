@@ -1,33 +1,36 @@
-package alex_bou.stucom.com.alex_bou;
+package alex_bou.stucom.com.alex_bou.activities;
 
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import alex_bou.stucom.com.alex_bou.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingActivity extends AppCompatActivity {
 
     final int GALLERY_IMAGE_REQUEST = 1;
     final int CAMERA_IMAGE_REQUEST = 2;
+
     TextInputEditText inputName;
     TextInputEditText inputEmail;
     File imgFile;
     CircleImageView imgProfile;
     SharedPreferences prefs;
     SharedPreferences.Editor editorPrefs;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,17 +51,19 @@ public class SettingActivity extends AppCompatActivity {
         imgProfile = findViewById(R.id.imgProfile);
 
         // Set text inputs value if already saved in shared preferences, else set to empty string.
-        inputName.setText(prefs.getString("name",""));
-        inputEmail.setText(prefs.getString("email",""));
+        // inputName.setText(prefs.getString("name",""));
+        // inputEmail.setText(prefs.getString("email",""));
 
         // Get image file from internal files directory.
-        imgFile = new File(getFilesDir(), "imgProfile.jpg");
+        // imgFile = new File(getFilesDir(), "imgProfile.jpg");
 
         // If image file exists assign its uri to profile image
-        if (imgFile.exists()) {
-            imgProfile.setImageURI(Uri.fromFile(imgFile));
-        }
+        // if (imgFile.exists()) {
+        //     imgProfile.setImageURI(Uri.fromFile(imgFile));
+        // }
+
     }
+
 
     @Override
     protected void onPause() {
@@ -68,9 +73,9 @@ public class SettingActivity extends AppCompatActivity {
         // Get shared preferences editor.
         editorPrefs = prefs.edit();
         // Save email input current value.
-        editorPrefs.putString("email",inputEmail.getText().toString());
+        editorPrefs.putString("email", inputEmail.getText().toString());
         // Save name input current value.
-        editorPrefs.putString("name",inputName.getText().toString());
+        editorPrefs.putString("name", inputName.getText().toString());
         // Commit the changes to shared preferences.
         editorPrefs.apply();
     }
@@ -109,6 +114,7 @@ public class SettingActivity extends AppCompatActivity {
 
     /**
      * Saves image to application's internal storage.
+     *
      * @param bitmapImage bitmap representing image.
      */
     private void saveImageFromBitmap(Bitmap bitmapImage) {
@@ -132,6 +138,7 @@ public class SettingActivity extends AppCompatActivity {
 
     /**
      * Shows dialog asking to choose from picking from gallery or taking a picture, then starts the corresponding activity.
+     *
      * @param v image view
      */
     public void onImageClick(View v) {
@@ -140,7 +147,7 @@ public class SettingActivity extends AppCompatActivity {
         // Set title for the dialog
         builder.setTitle(R.string.imgDialogTitle);
         // Generate options.
-        String[] options = {getString(R.string.txtGallery), getString(R.string.txtCamera),getString(R.string.txtDelete)};
+        String[] options = {getString(R.string.txtGallery), getString(R.string.txtCamera), getString(R.string.txtDelete)};
         // Set items and its onClick function.
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
@@ -152,7 +159,7 @@ public class SettingActivity extends AppCompatActivity {
                         break;
                     case 1: // camera selected
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent,CAMERA_IMAGE_REQUEST);
+                        startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
                         break;
                     case 2: // delete selected
                         imgFile.delete();

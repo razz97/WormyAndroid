@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="alex_bou.stucom.com.alex_bou">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -16,19 +15,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingActivity" android:label="@string/btnSetting" />
-        <activity android:name=".PlayActivity" android:label="@string/btnPlay" />
-        <activity android:name=".RankingActivity" android:label="@string/btnRanking"/>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity android:name=".activities.MainActivity" />
         <activity
-            android:name=".AboutActivity"
+            android:name=".activities.SettingActivity"
+            android:label="@string/btnSetting" />
+        <activity
+            android:name=".activities.PlayActivity"
+            android:label="@string/btnPlay" />
+        <activity
+            android:name=".activities.RankingActivity"
+            android:label="@string/btnRanking" />
+        <activity
+            android:name=".activities.AboutActivity"
             android:label="@string/btnAbout" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -43,8 +53,10 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/stucomLocation"></activity>
+            android:name=".activities.MapsActivity"
+            android:label="@string/stucomLocation" />
+        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.SplashActivity" />
     </application>
 
 </manifest>
