@@ -2,7 +2,7 @@ package com.stucom.abou.game.model;
 
 import java.util.List;
 
-public class User {
+public class User implements Comparable<User>{
 
     private int id;
     private String name;
@@ -73,4 +73,8 @@ public class User {
 
     public void setScores(List<Score> scores) { this.scores = scores; }
 
+    @Override
+    public int compareTo(User o) {
+        return Integer.parseInt(o.getTotalScore()) - Integer.parseInt(this.getTotalScore());
+    }
 }
