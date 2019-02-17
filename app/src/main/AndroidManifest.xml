@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="alex_bou.stucom.com.alex_bou">
+    package="alex_bou.stucom.com.alex">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+        android:name="com.stucom.abou.game.utils.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.StartActivity">
+        <activity android:name="com.stucom.abou.game.activities.bootstrap.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -27,18 +30,18 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".activities.MainActivity" />
+        <activity android:name="com.stucom.abou.game.activities.MainActivity" />
         <activity
-            android:name=".activities.SettingActivity"
+            android:name="com.stucom.abou.game.activities.SettingActivity"
             android:label="@string/btnSetting" />
         <activity
-            android:name=".activities.PlayActivity"
+            android:name="com.stucom.abou.game.activities.PlayActivity"
             android:label="@string/btnPlay" />
         <activity
-            android:name=".activities.RankingActivity"
+            android:name="com.stucom.abou.game.activities.RankingActivity"
             android:label="@string/btnRanking" />
         <activity
-            android:name=".activities.AboutActivity"
+            android:name="com.stucom.abou.game.activities.AboutActivity"
             android:label="@string/btnAbout" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -53,10 +56,10 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.MapsActivity"
+            android:name="com.stucom.abou.game.activities.MapsActivity"
             android:label="@string/stucomLocation" />
-        <activity android:name=".activities.RegisterActivity" />
-        <activity android:name=".activities.SplashActivity" />
+        <activity android:name="com.stucom.abou.game.activities.register.RegisterActivity" />
+        <activity android:name="com.stucom.abou.game.activities.bootstrap.SplashActivity" />
     </application>
 
 </manifest>
