@@ -14,29 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import alex_bou.stucom.com.alex.R;
 
-import com.stucom.abou.game.model.LoggedUser;
-import com.stucom.abou.game.utils.MyVolley;
+import com.stucom.abou.game.model.AccessApi;
 
 public class EmailFragment extends Fragment {
 
     private TextInputEditText emailEdit;
     private TextInputLayout textInputLayout;
     private EmailFragmentListener listener;
-    private LinearLayout rootView;
 
     interface EmailFragmentListener {
         void onVerificationSent(String email);
@@ -48,13 +37,12 @@ public class EmailFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_email,container,false);
         emailEdit = v.findViewById(R.id.edit_email);
         textInputLayout = v.findViewById(R.id.text_input_layout);
-        rootView = v.findViewById(R.id.fragment_email);
         Button submitButton = v.findViewById(R.id.button_submit);
         submitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (validateEmail())
-                            sendVerificationCode(emailEdit.getText());
+                        if (validateEmail() && emailEdit.getText() != null)
+                            sendVerificationCode(emailEdit.getText().toString());
                         else
                             textInputLayout.setError("Invalid email.");
                     }
@@ -82,35 +70,30 @@ public class EmailFragment extends Fragment {
         return Patterns.EMAIL_ADDRESS.matcher(emailEdit.getText()).matches();
     }
 
-    private void sendVerificationCode(final CharSequence email) {
+    private void sendVerificationCode(final String email) {
         final ProgressDialog progress = ProgressDialog.show(getActivity(),null,null);
         progress.setContentView(new ProgressBar(getActivity()));
-        progress.setCancelable(false); // disable dismiss by tapping outside of the dialog
+        progress.setCancelable(false);
         progress.show();
-        StringRequest request = new StringRequest(Request.Method.POST, RegisterActivity.REGISTER_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        progress.dismiss();
-                        listener.onVerificationSent(email.toString());
-                        LoggedUser.getInstance().setEmail(email.toString());
-                        LoggedUser.getInstance().saveToPrefs();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progress.dismiss();
-                        Snackbar.make(EmailFragment.this.getActivity().findViewById(android.R.id.content),"You don't have internet connection.",Snackbar.LENGTH_INDEFINITE);                    }
-                })
-        {
+        AccessApi.getInstance().registerEmail(new AccessApi.ApiListener<Integer>() {
             @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email.toString());
-                return params;
+            public void onResult(AccessApi.Result result, @Nullable Integer data) {
+                if (result == AccessApi.Result.OK) {
+                    progress.dismiss();
+                    listener.onVerificationSent(email);
+                } else {
+                    progress.dismiss();
+                    if (EmailFragment.this.getActivity() != null)
+                        Snackbar.make(EmailFragment.this.getActivity().findViewById(android.R.id.content),"Could not connect to the server.",Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Retry", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    EmailFragment.this.sendVerificationCode(email);
+                                }
+                            });
+                }
             }
-        };
-        MyVolley.getInstance().add(request);
+        }, email);
     }
+
 }

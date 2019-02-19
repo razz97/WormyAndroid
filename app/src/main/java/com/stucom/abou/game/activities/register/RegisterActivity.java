@@ -14,7 +14,7 @@ import alex_bou.stucom.com.alex.R;
 
 public class RegisterActivity extends AppCompatActivity implements VerifyFragment.VerifyFragmentListener, EmailFragment.EmailFragmentListener {
 
-    protected final static String REGISTER_URL = "https://api.flx.cat/dam2game/register";
+    String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +25,12 @@ public class RegisterActivity extends AppCompatActivity implements VerifyFragmen
     @Override
     protected void onResume() {
         super.onResume();
-        showSnackbarIfConnectedElseFragment();
+        startIfConnected();
     }
 
     @Override
     public void onVerificationSent(String email) {
+        this.email = email;
         changeFragment(VerifyFragment.newInstance(email),true);
     }
 
@@ -56,21 +57,17 @@ public class RegisterActivity extends AppCompatActivity implements VerifyFragmen
     }
 
 
-    private void showSnackbarIfConnectedElseFragment() {
+    private void startIfConnected() {
         if (App.isOnline()) {
-            changeFragment(new EmailFragment(),false);
-        } else
-            getSnackbar().show();
-    }
-
-
-    private Snackbar getSnackbar() {
-        return Snackbar.make(findViewById(android.R.id.content), "You don't have internet connection.", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Try Again", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                showSnackbarIfConnectedElseFragment();
-                            }
-                        });
+            changeFragment(email == null ? new EmailFragment() : VerifyFragment.newInstance(email),email != null);
+        } else {
+            Snackbar.make(findViewById(android.R.id.content), "You don't have internet connection.", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Try Again", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startIfConnected();
+                        }
+                    }).show();
+        }
     }
 }

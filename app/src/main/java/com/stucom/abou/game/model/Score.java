@@ -1,6 +1,8 @@
 package com.stucom.abou.game.model;
 
-public class Score {
+import java.io.Serializable;
+
+public class Score  implements Serializable {
 
     int level;
     int score;

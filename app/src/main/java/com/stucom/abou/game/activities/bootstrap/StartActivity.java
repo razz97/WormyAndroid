@@ -18,9 +18,9 @@ public class StartActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (LoggedUser.getInstance().isUpdated()) {
+        if (LoggedUser.getInstance().isUpdated())
             startActivity(new Intent(this, MainActivity.class));
-        }  else
+        else
             startActivity(new Intent(this, SplashActivity.class));
 
         finish();
