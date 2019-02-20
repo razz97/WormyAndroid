@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/register"
         android:textAlignment="center"
         android:textSize="25sp"/>
 
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="In order to complete your registration, enter the verify code sent to your email address."
+        android:text="@string/text_finish_verify"
         android:padding="16dp"/>
 
     <android.support.design.widget.TextInputLayout
@@ -30,7 +30,7 @@
             android:id="@+id/edit_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Verify code"
+            android:hint="@string/verify_code"
             android:inputType="number"
             android:padding="16dp" />
 
@@ -40,7 +40,7 @@
         android:id="@+id/button_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="submit"
+        android:text="@string/submit"
         android:textColor="@color/white"
         android:layout_marginTop="30dp"/>
 
@@ -48,7 +48,7 @@
         android:id="@+id/button_change"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Change email"
+        android:text="@string/change_email"
         android:textColor="@color/white"
         android:padding="16dp"
         android:backgroundTint="@android:color/darker_gray"  />

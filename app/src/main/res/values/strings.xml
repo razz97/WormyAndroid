@@ -3,7 +3,7 @@
     <string name="btnPlay">Play</string>
     <string name="btnRanking">Ranking</string>
     <string name="btnSetting">Settings</string>
-    <string name="btnAbout">About...</string>
+    <string name="btnAbout">About…</string>
     <string name="app">App</string>
     <string name="team">Team</string>
     <string name="txtAboutUs">This app was developed by Alex Bou, currently studying a course in cross-platform app development in Stucom centre d\'estudis, check where you can find us by tapping the button below.</string>
@@ -26,4 +26,18 @@
     <string name="txtDelete">Delete</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="action_settings">Settings</string>
+    <string name="score">Score</string>
+    <string name="submit">Submit</string>
+    <string name="level">Level</string>
+    <string name="delete_account">Delete account</string>
+    <string name="downloading_user_data">Downloading user data…</string>
+    <string name="send">Send</string>
+    <string name="text_verify">Please introduce your email address so we can register your application, an email will be sent with a code to verify your identity.</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="text_finish_verify">In order to complete your registration, enter the verify code sent to your email address.</string>
+    <string name="verify_code">Verify code</string>
+    <string name="change_email">Change email</string>
+    <string name="message_sent_status">Status of the message sent</string>
+    <string name="text_image_user">Image of the user</string>
 </resources>

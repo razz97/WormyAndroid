@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/register"
         android:textAlignment="center"
         android:textSize="25sp"/>
 
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="Please introduce your email address so we can register your application, an email will be sent with a code to verify your identity."
+        android:text="@string/text_verify"
         android:padding="16dp"/>
 
     <android.support.design.widget.TextInputLayout
@@ -30,7 +30,7 @@
             android:id="@+id/edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:padding="16dp" />
 
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="submit"
+        android:text="@string/submit"
         android:textColor="@color/white"/>
 
 </LinearLayout>

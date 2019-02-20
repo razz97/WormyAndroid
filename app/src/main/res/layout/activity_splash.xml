@@ -25,7 +25,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Downloading user data..."
+        android:text="@string/downloading_user_data"
         android:textColor="@color/niceRed"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -18,7 +17,8 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text"
-        app:srcCompat="@drawable/received" />
+        app:srcCompat="@drawable/received"
+        android:contentDescription="@string/message_sent_status" />
 
     <TextView
         android:id="@+id/text"
@@ -30,7 +30,6 @@
         android:layout_marginBottom="3dp"
         android:background="@drawable/rectangle_orange"
         android:padding="5dp"
-        android:text="TextView"
         android:textAlignment="textEnd"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,9 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
         android:layout_marginEnd="10dp"
-        android:text="TextView"
         android:textAlignment="textEnd"
-        android:textSize="10sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/status"
         app:layout_constraintHorizontal_bias="0.64"
