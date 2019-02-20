@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.stucom.abou.game.activities.bootstrap.StartActivity;
 import com.stucom.abou.game.model.AccessApi;
 import com.stucom.abou.game.model.LoggedUser;
 import com.stucom.abou.game.model.User;
@@ -47,15 +48,13 @@ public class RankingActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         setActivityState();
-
     }
 
     private void setActivityState() {
         if (App.isOnline()) {
             swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
-                public void onRefresh() {
-                    refreshRecycler();
+                public void onRefresh() {refreshRecycler();
                 }
             });
             refreshRecycler();
@@ -63,14 +62,14 @@ public class RankingActivity extends AppCompatActivity {
             Snackbar.make(findViewById(android.R.id.content),"Internet connection is missing.",Snackbar.LENGTH_INDEFINITE)
                     .setAction("Retry", new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            setActivityState();
+                        public void onClick(View v) {setActivityState();
                         }
                     }).show();
         }
     }
 
     private void refreshRecycler() {
+        swipeRefreshLayout.setRefreshing(true);
         AccessApi.getInstance().getRanking(new AccessApi.ApiListener<List<User>>() {
             @Override
             public void onResult(AccessApi.Result result, @Nullable List<User> data) {
@@ -81,8 +80,9 @@ public class RankingActivity extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                         break;
                     case ERROR_TOKEN:
-                        // TODO Control error token
-                        Log.d("","Error Token in ranking activity");
+                        Intent intent = new Intent(RankingActivity.this, StartActivity.class);
+                        startActivity(intent);
+                        finish();
                         break;
                     case ERROR_CONNECTION:
                         Snackbar.make(findViewById(android.R.id.content),"Can't connect to the server.",Snackbar.LENGTH_INDEFINITE)
@@ -137,9 +137,15 @@ public class RankingActivity extends AppCompatActivity {
             viewHolder.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(RankingActivity.this,UserDetailActivity.class);
-                    intent.putExtra("user", user.getId());
-                    startActivity(intent);
+                    if (user.getId() != LoggedUser.getInstance().getId()) {
+                        Intent intent = new Intent(RankingActivity.this,UserDetailActivity.class);
+                        intent.putExtra("id", user.getId());
+                        intent.putExtra("image", user.getImage());
+                        intent.putExtra("name", user.getName());
+                        startActivity(intent);
+                    } else {
+                        startActivity(new Intent(RankingActivity.this, HistoryActivity.class));
+                    }
                 }
             });
             if (user.getId() == LoggedUser.getInstance().getId())

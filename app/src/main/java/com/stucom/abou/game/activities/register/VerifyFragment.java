@@ -101,7 +101,9 @@ public class VerifyFragment extends Fragment {
             public void onResult(AccessApi.Result result, @Nullable String data) {
                 progress.dismiss();
                 switch (result) {
-                    case OK: listener.onCodeVerified(); break;
+                    case OK:
+                        listener.onCodeVerified();
+                        break;
                     case ERROR_CONNECTION:
                         if (getActivity() != null)
                             Snackbar.make(getActivity().findViewById(android.R.id.content),"Could not connect to the server.",Snackbar.LENGTH_INDEFINITE)
@@ -113,6 +115,10 @@ public class VerifyFragment extends Fragment {
                     case ERROR_VERIFY:
                         if (getActivity() != null)
                             Snackbar.make(getActivity().findViewById(android.R.id.content),"Invalid code, please try again.",Snackbar.LENGTH_LONG).show();
+                        break;
+                    case GENERIC_ERROR:
+                        if (getActivity() != null)
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),"There was an error.",Snackbar.LENGTH_LONG).show();
                 }
             }
         }, email, verifyCode);

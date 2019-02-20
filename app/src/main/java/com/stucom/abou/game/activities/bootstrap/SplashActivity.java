@@ -2,8 +2,10 @@ package com.stucom.abou.game.activities.bootstrap;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.stucom.abou.game.activities.MainActivity;
 import com.stucom.abou.game.activities.register.RegisterActivity;
@@ -65,6 +67,14 @@ public class SplashActivity extends AppCompatActivity implements AccessApi.ApiLi
             navigateToMain();
         } else if (result == AccessApi.Result.ERROR_TOKEN) {
             navigateToRegister();
+        } else if (result == AccessApi.Result.GENERIC_ERROR ) {
+            Snackbar.make(findViewById(android.R.id.content),"There was an error.",Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Retry", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            update();
+                        }
+                    }).show();
         }
     }
 }

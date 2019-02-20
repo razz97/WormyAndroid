@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.util.Base64;
 
 import com.squareup.picasso.Picasso;
+import com.stucom.abou.game.activities.bootstrap.StartActivity;
 import com.stucom.abou.game.model.AccessApi;
 import com.stucom.abou.game.model.LoggedUser;
 import com.stucom.abou.game.utils.App;
@@ -43,7 +44,7 @@ public class SettingActivity extends AppCompatActivity {
 
     TextInputEditText inputName;
     TextView emailText;
-    Button submitButton;
+    Button deleteButton;
     File imgFile;
     CircleImageView imgProfile;
     String base64Image;
@@ -76,7 +77,7 @@ public class SettingActivity extends AppCompatActivity {
         inputName = findViewById(R.id.inputName);
         emailText = findViewById(R.id.emailText);
         imgProfile = findViewById(R.id.imgProfile);
-        submitButton = findViewById(R.id.submitChanges);
+        deleteButton = findViewById(R.id.buttonDelete);
     }
 
     private void setActivityState() {
@@ -89,10 +90,10 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }).show();
         } else {
-            submitButton.setOnClickListener( new View.OnClickListener() {
+            deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    updateUser();
+                    showdialogDelete();
                 }
             } );
             imgProfile.setOnClickListener(new View.OnClickListener() {
@@ -104,11 +105,61 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
+    private void showdialogDelete() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose an option: ");
+        String[] options = {"Unregister this application","Delete your account permanently"};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                builder.setTitle("Are you sure?");
+                builder.setMessage("This action cannot be reversed.");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { delete(which == 1);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) { dialog.dismiss();
+                    }
+                });
+                builder.create().show();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void delete(final boolean mustDelete) {
+        AccessApi.getInstance().unregister(new AccessApi.ApiListener<Boolean>() {
+            @Override
+            public void onResult(AccessApi.Result result, @Nullable Boolean data) {
+                switch (result) {
+                    case OK:
+                    case ERROR_TOKEN:
+                        imgFile.delete();
+                        Intent intent = new Intent(SettingActivity.this, StartActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case ERROR_CONNECTION:
+                        Snackbar.make(findViewById(android.R.id.content),"Could not connect to the server.",Snackbar.LENGTH_LONG).show();
+                        break;
+                    case GENERIC_ERROR:
+                        Snackbar.make(findViewById(android.R.id.content),"There was an error.",Snackbar.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        }, mustDelete);
+    }
+
     @Override
     protected void onPause() {
+        if (inputName.getText() != null && !inputName.getText().toString().equals("") && isFinishing())
+                updateUser(false);
         super.onPause();
-        if (inputName.getText() != null)
-            LoggedUser.getInstance().setName(inputName.getText().toString());
     }
 
     @Override
@@ -126,7 +177,7 @@ public class SettingActivity extends AppCompatActivity {
             Bitmap realImage = (Bitmap)  data.getExtras().get("data");
             if (realImage != null) {
                 base64Image = encodeToBase64(realImage);
-                updateUser();
+                updateUser(true);
                 imgFile.delete();
                 imgProfile.setImageBitmap(realImage);
                 saveImageFromBitmap(realImage);
@@ -146,7 +197,7 @@ public class SettingActivity extends AppCompatActivity {
                 imgProfile.setImageBitmap(realImage);
                 imgFile.delete();
                 saveImageFromBitmap(realImage);
-                updateUser();
+                updateUser(true);
             } else
                 showCameraError();
         } catch (FileNotFoundException e) {
@@ -154,11 +205,13 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-    private void updateUser() {
-        final ProgressDialog progress = ProgressDialog.show(this,null,null);
-        progress.setContentView(new ProgressBar(this));
-        progress.setCancelable(false);
-        progress.show();
+    private void updateUser(final boolean progressBar) {
+        final ProgressDialog progress = progressBar ? ProgressDialog.show(this,null,null) : null;
+        if (progress != null) {
+            progress.setContentView(new ProgressBar(this));
+            progress.setCancelable(false);
+            progress.show();
+        }
         String name = inputName.getText() == null ? null : inputName.getText().toString();
         AccessApi.getInstance().updateServerUser(new AccessApi.ApiListener<String>() {
             @Override
@@ -169,13 +222,15 @@ public class SettingActivity extends AppCompatActivity {
                         base64Image = null;
                         break;
                     case ERROR_TOKEN:
-                        Log.d("infoDebug","token error when updating");
-                        // TODO Control error
+                        Intent intent = new Intent(SettingActivity.this, StartActivity.class);
+                        startActivity(intent);
+                        finish();
                         break;
                     case ERROR_CONNECTION:
                         Snackbar.make(findViewById(android.R.id.content),"Could not connect to the server.",Snackbar.LENGTH_LONG).show();
                 }
-                progress.dismiss();
+                if (progress != null)
+                    progress.dismiss();
             }
         }, base64Image,name);
     }
@@ -185,7 +240,7 @@ public class SettingActivity extends AppCompatActivity {
             LoggedUser.getInstance().setName(inputName.getText().toString());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.imgDialogTitle);
-        String[] options = {getString(R.string.txtGallery), getString(R.string.txtCamera), getString(R.string.txtDelete)};
+        String[] options = {getString(R.string.txtGallery), getString(R.string.txtCamera)};
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -197,10 +252,6 @@ public class SettingActivity extends AppCompatActivity {
                     case 1: // camera selected
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
-                        break;
-                    case 2: // delete selected
-                        imgFile.delete();
-                        imgProfile.setImageResource(R.drawable.usr);
                 }
             }
         });

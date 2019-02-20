@@ -7,6 +7,8 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.stucom.abou.game.utils.App;
 
+import java.util.List;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class LoggedUser extends User {
@@ -66,5 +68,14 @@ public class LoggedUser extends User {
                 .getSharedPreferences(App.getAppContext().getPackageName(),MODE_PRIVATE)
                 .getString("user",null);
         instance = new Gson().fromJson(user, LoggedUser.class);
+    }
+
+    public void logout() {
+        setUpdated(false);
+        setToken(null);
+        setEmail(null);
+        setImage(null);
+        setName(null);
+        saveToPrefs();
     }
 }

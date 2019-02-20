@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 
 public class App extends Application {
 
-    private static Context context;
+    private  static Context context;
 
     public void onCreate() {
         super.onCreate();

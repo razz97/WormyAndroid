@@ -78,19 +78,29 @@ public class EmailFragment extends Fragment {
         AccessApi.getInstance().registerEmail(new AccessApi.ApiListener<Integer>() {
             @Override
             public void onResult(AccessApi.Result result, @Nullable Integer data) {
-                if (result == AccessApi.Result.OK) {
-                    progress.dismiss();
-                    listener.onVerificationSent(email);
-                } else {
-                    progress.dismiss();
-                    if (EmailFragment.this.getActivity() != null)
-                        Snackbar.make(EmailFragment.this.getActivity().findViewById(android.R.id.content),"Could not connect to the server.",Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    EmailFragment.this.sendVerificationCode(email);
-                                }
-                            });
+                progress.dismiss();
+                switch (result) {
+                    case OK:
+                        listener.onVerificationSent(email);
+                        break;
+                    case ERROR_CONNECTION:
+                        if (getActivity() != null)
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),"Could not connect to the server.",Snackbar.LENGTH_INDEFINITE)
+                                    .setAction("Retry", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) { sendVerificationCode(email);
+                                        }
+                                    });
+                        break;
+                    case GENERIC_ERROR:
+                        if (getActivity() != null)
+                            Snackbar.make(getActivity().findViewById(android.R.id.content),"There was an error.",Snackbar.LENGTH_LONG)
+                                    .setAction("Retry", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) { sendVerificationCode(email);
+                                    }
+                                });
+                        break;
                 }
             }
         }, email);

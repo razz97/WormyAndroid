@@ -19,8 +19,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.stucom.abou.game.activities.UserDetailActivity"></activity>
-        <activity android:name="com.stucom.abou.game.activities.bootstrap.StartActivity">
+        <activity android:name="com.stucom.abou.game.activities.HistoryActivity" android:label="History"></activity>
+        <activity android:name="com.stucom.abou.game.activities.UserDetailActivity" android:label="Chat"/>
+        <activity android:name="com.stucom.abou.game.activities.bootstrap.StartActivity"
+                            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +34,7 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name="com.stucom.abou.game.activities.MainActivity" />
+        <activity android:name="com.stucom.abou.game.activities.MainActivity" android:label="Menu"/>
         <activity
             android:name="com.stucom.abou.game.activities.SettingActivity"
             android:label="@string/btnSetting" />
