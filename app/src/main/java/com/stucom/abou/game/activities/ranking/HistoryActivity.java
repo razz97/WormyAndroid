@@ -1,5 +1,6 @@
 package com.stucom.abou.game.activities.ranking;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -78,8 +79,7 @@ public class HistoryActivity extends AppCompatActivity {
                         Snackbar.make(findViewById(android.R.id.content),generic ? "There was an error." : "Error connecting to the server.",Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Retry", new View.OnClickListener() {
                                     @Override
-                                    public void onClick(View v) {
-                                        refreshRecycler();
+                                    public void onClick(View v) {refreshRecycler();
                                     }
                                 }).show();
                 }
@@ -116,12 +116,13 @@ public class HistoryActivity extends AppCompatActivity {
                     inflate(R.layout.item_score, parent, false);
             return new ScoreViewHolder(view);
         }
+
         @Override
         public void onBindViewHolder(@NonNull ScoreViewHolder viewHolder, int position) {
             final Score score = scores.get(position);
-            viewHolder.textView.setText(String.valueOf(score.getScore()));
-            viewHolder.textViewScore.setText(String.valueOf(score.getScore()));
-            viewHolder.textViewPlayed.setText(String.valueOf(score.getPlayedAt()));
+            viewHolder.textView.setText("Level: " + String.valueOf(score.getLevel()));
+            viewHolder.textViewScore.setText("Score: " + String.valueOf(score.getScore()));
+            viewHolder.textViewPlayed.setText("Played at: " + String.valueOf(score.getPlayedAt()));
         }
         @Override
         public int getItemCount() {

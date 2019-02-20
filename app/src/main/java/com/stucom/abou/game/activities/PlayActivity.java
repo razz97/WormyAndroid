@@ -39,7 +39,7 @@ public class PlayActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateScore() && validateLevel())
+                if (validateLevel() && validateScore())
                     submitScore();
             }
         });
@@ -48,18 +48,18 @@ public class PlayActivity extends AppCompatActivity {
     private boolean validateScore() {
         boolean valid = false;
         if (input.getEditText() != null)
-            valid = Pattern.compile("^\\d{9}$").matcher(input.getEditText().getText()).matches();
-        if (valid)
+            valid = Pattern.compile("^\\s*-?[0-9]{1,9}\\s*$").matcher(input.getEditText().getText()).matches();
+        if (!valid)
             input.setError("Score must have 1 to 9 digits");
         return valid;
     }
 
     private boolean validateLevel() {
         boolean valid = false;
-        if (input.getEditText() != null)
-            valid = Pattern.compile("^\\d{9}$").matcher(input.getEditText().getText()).matches();
-        if (valid)
-            input.setError("Level must have 1 to 9 digits");
+        if (inputLevel.getEditText() != null)
+            valid = Pattern.compile("^\\s*-?[0-9]{1,9}\\s*$").matcher(inputLevel.getEditText().getText()).matches();
+        if (!valid)
+            inputLevel.setError("Level must have 1 to 9 digits");
         return valid;
     }
 
