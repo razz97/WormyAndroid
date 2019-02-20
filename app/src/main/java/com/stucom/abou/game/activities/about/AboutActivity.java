@@ -1,4 +1,4 @@
-package com.stucom.abou.game.activities;
+package com.stucom.abou.game.activities.about;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +19,7 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create a new intent for starting MapsActivity
-                Intent goToPlay = new Intent(AboutActivity.this,MapsActivity.class);
+                Intent goToPlay = new Intent(AboutActivity.this, MapsActivity.class);
                 // Start it
                 startActivity(goToPlay);
             }
