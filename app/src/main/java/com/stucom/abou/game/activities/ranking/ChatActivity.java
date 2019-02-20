@@ -1,4 +1,4 @@
-package com.stucom.abou.game.activities;
+package com.stucom.abou.game.activities.ranking;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -6,33 +6,31 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.stucom.abou.game.activities.bootstrap.StartActivity;
-import com.stucom.abou.game.model.AccessApi;
-import com.stucom.abou.game.model.LoggedUser;
+import com.stucom.abou.game.rest.AccessApi;
+import com.stucom.abou.game.utils.LoggedUser;
 import com.stucom.abou.game.model.Message;
-import com.stucom.abou.game.model.User;
 
 import java.util.List;
 
 import alex_bou.stucom.com.alex.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserDetailActivity extends AppCompatActivity  {
+public class ChatActivity extends AppCompatActivity  {
 
     TextView textView ;
     TextInputLayout input;
@@ -47,7 +45,7 @@ public class UserDetailActivity extends AppCompatActivity  {
         @Override
         public void run() {
             refreshMessages();
-            handler.postDelayed(this, 5000);
+            handler.postDelayed(this, 3000);
         }
     };
 
@@ -78,7 +76,7 @@ public class UserDetailActivity extends AppCompatActivity  {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         imageView = findViewById(R.id.imgProfile);
-        textView = findViewById(R.id.textView);
+        textView = findViewById(R.id.text);
         if (userImage != null)
             Picasso.get().load(userImage).into(imageView);
         else
@@ -116,7 +114,7 @@ public class UserDetailActivity extends AppCompatActivity  {
                                     }).show();
                             break;
                         case ERROR_TOKEN:
-                            Intent intent = new Intent(UserDetailActivity.this, StartActivity.class);
+                            Intent intent = new Intent(ChatActivity.this, StartActivity.class);
                             startActivity(intent);
                             finish();
                     }
@@ -143,18 +141,17 @@ public class UserDetailActivity extends AppCompatActivity  {
     class MessagesViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView;
+        TextView textDate;
+        ImageView imageView;
 
         MessagesViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textView);
-        }
-
-        void setMessageAs(boolean mine) {
-            if (mine) {
-                textView.setGravity(Gravity.END);
-            }
+            textView = itemView.findViewById(R.id.text);
+            textDate = itemView.findViewById(R.id.time);
+            imageView = itemView.findViewById(R.id.status);
         }
     }
+
 
     class MessagesAdapter extends RecyclerView.Adapter<MessagesViewHolder> {
 
@@ -169,16 +166,31 @@ public class UserDetailActivity extends AppCompatActivity  {
         @Override
         public MessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext()).
-                    inflate(R.layout.message, parent, false);
-            Log.d("infoDebug","createViewHolder");
+                    inflate(
+                            messages.get(position).getFromId() != LoggedUser.getInstance().getId() ? R.layout.message_received : R.layout.message_sent,
+                            parent,
+                            false
+                    );
             return new MessagesViewHolder(view);
         }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
         @Override
         public void onBindViewHolder(@NonNull MessagesViewHolder viewHolder, int position) {
             final Message message = messages.get(position);
-            Log.d("infoDebug",message.getSentAt());
             viewHolder.textView.setText(message.getText());
-            viewHolder.setMessageAs(message.getFromId() == LoggedUser.getInstance().getId());
+            if (message.getFromId() == LoggedUser.getInstance().getId()) {
+                boolean seen = message.getReceivedAt() != null;
+                viewHolder.imageView.setImageResource(seen ? R.drawable.received : R.drawable.sent);
+                viewHolder.textDate.setText(seen ? message.getReceivedAt() : message.getSentAt());
+            } else {
+                viewHolder.textDate.setText(message.getSentAt());
+            }
+
         }
         @Override
         public int getItemCount() {

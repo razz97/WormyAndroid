@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.stucom.abou.game.activities.bootstrap.StartActivity;
-import com.stucom.abou.game.model.AccessApi;
+import com.stucom.abou.game.rest.AccessApi;
 
 import alex_bou.stucom.com.alex.R;
 

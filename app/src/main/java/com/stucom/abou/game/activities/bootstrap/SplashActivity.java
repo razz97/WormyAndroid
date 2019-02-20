@@ -9,10 +9,10 @@ import android.view.View;
 
 import com.stucom.abou.game.activities.MainActivity;
 import com.stucom.abou.game.activities.register.RegisterActivity;
-import com.stucom.abou.game.model.AccessApi;
+import com.stucom.abou.game.rest.AccessApi;
 
 import alex_bou.stucom.com.alex.R;
-import com.stucom.abou.game.model.LoggedUser;
+import com.stucom.abou.game.utils.LoggedUser;
 import com.stucom.abou.game.utils.App;
 
 public class SplashActivity extends AppCompatActivity implements AccessApi.ApiListener<String> {

@@ -19,8 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.stucom.abou.game.activities.HistoryActivity" android:label="History"></activity>
-        <activity android:name="com.stucom.abou.game.activities.UserDetailActivity" android:label="Chat"/>
+        <activity android:name="com.stucom.abou.game.activities.ranking.HistoryActivity" android:label="History"></activity>
+        <activity android:name="com.stucom.abou.game.activities.ranking.ChatActivity" android:label="Chat"/>
         <activity android:name="com.stucom.abou.game.activities.bootstrap.StartActivity"
                             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -42,10 +42,10 @@
             android:name="com.stucom.abou.game.activities.PlayActivity"
             android:label="@string/btnPlay" />
         <activity
-            android:name="com.stucom.abou.game.activities.RankingActivity"
+            android:name="com.stucom.abou.game.activities.ranking.RankingActivity"
             android:label="@string/btnRanking" />
         <activity
-            android:name="com.stucom.abou.game.activities.AboutActivity"
+            android:name="com.stucom.abou.game.activities.about.AboutActivity"
             android:label="@string/btnAbout" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -60,7 +60,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.stucom.abou.game.activities.MapsActivity"
+            android:name="com.stucom.abou.game.activities.about.MapsActivity"
             android:label="@string/stucomLocation" />
         <activity android:name="com.stucom.abou.game.activities.register.RegisterActivity" />
         <activity android:name="com.stucom.abou.game.activities.bootstrap.SplashActivity" />

@@ -1,20 +1,17 @@
-package com.stucom.abou.game.model;
+package com.stucom.abou.game.utils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.stucom.abou.game.utils.App;
-
-import java.util.List;
+import com.stucom.abou.game.model.User;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class LoggedUser extends User {
 
     private static LoggedUser instance;
-    private String token ;
+    private String token;
     private String email;
     private transient boolean updated = false;
 

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.stucom.abou.game.activities.MainActivity;
-import com.stucom.abou.game.model.LoggedUser;
+import com.stucom.abou.game.utils.LoggedUser;
 
 public class StartActivity extends AppCompatActivity {
 

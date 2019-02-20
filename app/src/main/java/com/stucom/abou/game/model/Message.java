@@ -33,7 +33,7 @@ public class Message {
     }
 
     public String getSentAt() {
-        return SentAt;
+        return SentAt != null ? SentAt.split("T")[0] : null;
     }
 
     public void setSentAt(String sentAt) {
@@ -41,7 +41,7 @@ public class Message {
     }
 
     public String getReceivedAt() {
-        return ReceivedAt;
+        return ReceivedAt != null ? ReceivedAt.split("T")[0] :  null;
     }
 
     public void setReceivedAt(String receivedAt) {

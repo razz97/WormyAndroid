@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.stucom.abou.game.model.AccessApi;
+import com.stucom.abou.game.rest.AccessApi;
 
 import java.util.regex.Pattern;
 

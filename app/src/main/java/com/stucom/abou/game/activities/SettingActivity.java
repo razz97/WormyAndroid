@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -22,8 +21,8 @@ import android.util.Base64;
 
 import com.squareup.picasso.Picasso;
 import com.stucom.abou.game.activities.bootstrap.StartActivity;
-import com.stucom.abou.game.model.AccessApi;
-import com.stucom.abou.game.model.LoggedUser;
+import com.stucom.abou.game.rest.AccessApi;
+import com.stucom.abou.game.utils.LoggedUser;
 import com.stucom.abou.game.utils.App;
 
 import java.io.ByteArrayOutputStream;

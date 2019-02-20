@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.stucom.abou.game.activities.about.AboutActivity;
+import com.stucom.abou.game.activities.ranking.RankingActivity;
+
 import alex_bou.stucom.com.alex.R;
 
 public class MainActivity extends AppCompatActivity {

@@ -19,7 +19,7 @@ import android.widget.ProgressBar;
 
 import alex_bou.stucom.com.alex.R;
 
-import com.stucom.abou.game.model.AccessApi;
+import com.stucom.abou.game.rest.AccessApi;
 
 public class EmailFragment extends Fragment {
 

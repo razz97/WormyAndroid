@@ -1,17 +1,15 @@
-package com.stucom.abou.game.activities;
+package com.stucom.abou.game.activities.ranking;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.util.Consumer;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +18,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.stucom.abou.game.activities.bootstrap.StartActivity;
-import com.stucom.abou.game.model.AccessApi;
-import com.stucom.abou.game.model.LoggedUser;
+import com.stucom.abou.game.rest.AccessApi;
+import com.stucom.abou.game.utils.LoggedUser;
 import com.stucom.abou.game.model.User;
 import com.stucom.abou.game.utils.App;
 
@@ -107,7 +105,7 @@ public class RankingActivity extends AppCompatActivity {
         UsersViewHolder(@NonNull View itemView) {
             super(itemView);
             view = itemView.findViewById(R.id.container);
-            textView = itemView.findViewById(R.id.textView);
+            textView = itemView.findViewById(R.id.text);
             imageView = itemView.findViewById(R.id.imageView);
             textViewScore = itemView.findViewById(R.id.textViewScore);
         }
@@ -138,7 +136,7 @@ public class RankingActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (user.getId() != LoggedUser.getInstance().getId()) {
-                        Intent intent = new Intent(RankingActivity.this,UserDetailActivity.class);
+                        Intent intent = new Intent(RankingActivity.this, ChatActivity.class);
                         intent.putExtra("id", user.getId());
                         intent.putExtra("image", user.getImage());
                         intent.putExtra("name", user.getName());

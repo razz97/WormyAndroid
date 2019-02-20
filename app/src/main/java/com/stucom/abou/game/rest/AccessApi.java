@@ -1,17 +1,18 @@
-package com.stucom.abou.game.model;
+package com.stucom.abou.game.rest;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.stucom.abou.game.utils.LoggedUser;
+import com.stucom.abou.game.model.Message;
+import com.stucom.abou.game.model.User;
 import com.stucom.abou.game.utils.APIResponse;
-import com.stucom.abou.game.utils.MyVolley;
 
 import java.lang.reflect.Type;
 import java.util.Collections;

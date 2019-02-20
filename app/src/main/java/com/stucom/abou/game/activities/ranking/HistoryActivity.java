@@ -1,4 +1,4 @@
-package com.stucom.abou.game.activities;
+package com.stucom.abou.game.activities.ranking;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -9,24 +9,20 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.stucom.abou.game.activities.bootstrap.StartActivity;
-import com.stucom.abou.game.model.AccessApi;
-import com.stucom.abou.game.model.LoggedUser;
+import com.stucom.abou.game.rest.AccessApi;
+import com.stucom.abou.game.utils.LoggedUser;
 import com.stucom.abou.game.model.Score;
-import com.stucom.abou.game.model.User;
 import com.stucom.abou.game.utils.App;
 
 import java.util.List;
 
 import alex_bou.stucom.com.alex.R;
-
-import static com.stucom.abou.game.model.AccessApi.Result.ERROR_TOKEN;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -95,7 +91,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         ScoreViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textView);
+            textView = itemView.findViewById(R.id.text);
             textViewScore = itemView.findViewById(R.id.textViewScore);
             textViewPlayed = itemView.findViewById(R.id.textViewPlayed);
         }
