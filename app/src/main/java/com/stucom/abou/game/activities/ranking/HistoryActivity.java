@@ -32,14 +32,14 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-         recyclerView = findViewById(R.id.recyclerView);
-         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-         recyclerView.setItemAnimator(new DefaultItemAnimator());
          setActivityState();
     }
 
@@ -60,6 +60,7 @@ public class HistoryActivity extends AppCompatActivity {
         AccessApi.getInstance().updateLocalUser(new AccessApi.ApiListener<String>() {
             @Override
             public void onResult(AccessApi.Result result, @Nullable String data) {
+                boolean generic = false;
                 switch (result) {
                     case OK:
                         recyclerView.setAdapter(new ScoresAdapter(LoggedUser.getInstance().getScores()));
@@ -71,8 +72,10 @@ public class HistoryActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                         break;
+                    case GENERIC_ERROR:
+                        generic = true;
                     case ERROR_CONNECTION:
-                        Snackbar.make(findViewById(android.R.id.content),"Error connecting to the server.",Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(findViewById(android.R.id.content),generic ? "There was an error." : "Error connecting to the server.",Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Retry", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -110,7 +113,7 @@ public class HistoryActivity extends AppCompatActivity {
         @Override
         public ScoreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext()).
-                    inflate(R.layout.score, parent, false);
+                    inflate(R.layout.item_score, parent, false);
             return new ScoreViewHolder(view);
         }
         @Override

@@ -2,11 +2,12 @@ package com.stucom.abou.game.model;
 
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class Score  implements Serializable {
 
-    int level;
-    int score;
-    String playedAt;
+    private int level;
+    private int score;
+    private String playedAt;
 
     public int getLevel() {
         return level;

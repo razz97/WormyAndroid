@@ -36,15 +36,15 @@ public class RankingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ranking);
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         setActivityState();
     }
 
@@ -71,6 +71,7 @@ public class RankingActivity extends AppCompatActivity {
         AccessApi.getInstance().getRanking(new AccessApi.ApiListener<List<User>>() {
             @Override
             public void onResult(AccessApi.Result result, @Nullable List<User> data) {
+                boolean generic = false;
                 switch (result) {
                     case OK:
                         UsersAdapter adapter = new UsersAdapter(data);
@@ -82,8 +83,10 @@ public class RankingActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                         break;
+                    case GENERIC_ERROR:
+                        generic = true;
                     case ERROR_CONNECTION:
-                        Snackbar.make(findViewById(android.R.id.content),"Can't connect to the server.",Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(findViewById(android.R.id.content), generic ?  "There was an error" :"Can't connect to the server.",Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Retry", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -124,7 +127,7 @@ public class RankingActivity extends AppCompatActivity {
         @Override
         public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext()).
-                    inflate(R.layout.list_item, parent, false);
+                    inflate(R.layout.item_ranking, parent, false);
             return new UsersViewHolder(view);
         }
         @Override

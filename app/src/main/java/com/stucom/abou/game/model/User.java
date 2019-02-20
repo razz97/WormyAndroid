@@ -3,6 +3,7 @@ package com.stucom.abou.game.model;
 import java.io.Serializable;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class User implements Comparable<User>, Serializable  {
 
     private int id;

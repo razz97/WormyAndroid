@@ -24,7 +24,7 @@ public class MyVolley {
         queue = Volley.newRequestQueue(context);
     }
 
-    public <T> void add(Request<T> request) {
+     <T> void add(Request<T> request) {
         queue.add(request);
     }
 }

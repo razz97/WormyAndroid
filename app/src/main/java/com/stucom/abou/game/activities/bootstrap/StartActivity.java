@@ -17,12 +17,10 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         if (LoggedUser.getInstance().isUpdated())
             startActivity(new Intent(this, MainActivity.class));
         else
             startActivity(new Intent(this, SplashActivity.class));
-
         finish();
     }
 }

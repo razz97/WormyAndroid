@@ -25,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity implements VerifyFragmen
     @Override
     protected void onResume() {
         super.onResume();
-        startIfConnected();
+        setActivityState();
     }
 
     @Override
@@ -57,15 +57,14 @@ public class RegisterActivity extends AppCompatActivity implements VerifyFragmen
     }
 
 
-    private void startIfConnected() {
+    private void setActivityState() {
         if (App.isOnline()) {
             changeFragment(email == null ? new EmailFragment() : VerifyFragment.newInstance(email),email != null);
         } else {
             Snackbar.make(findViewById(android.R.id.content), "You don't have internet connection.", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Try Again", new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            startIfConnected();
+                        public void onClick(View v) {setActivityState();
                         }
                     }).show();
         }

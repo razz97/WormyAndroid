@@ -1,6 +1,9 @@
 package com.stucom.abou.game.model;
 
-public class Message {
+import java.io.Serializable;
+
+@SuppressWarnings("unused")
+public class Message implements Serializable {
 
     private int Id;
     private int FromId;

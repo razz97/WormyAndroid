@@ -1,5 +1,6 @@
 package com.stucom.abou.game.utils;
 
+@SuppressWarnings("unused")
 public class APIResponse<T> {
     private T data;
     private int count;

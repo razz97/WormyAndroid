@@ -78,30 +78,23 @@ public class EmailFragment extends Fragment {
         AccessApi.getInstance().registerEmail(new AccessApi.ApiListener<Integer>() {
             @Override
             public void onResult(AccessApi.Result result, @Nullable Integer data) {
-                progress.dismiss();
+                boolean generic = false;
                 switch (result) {
                     case OK:
                         listener.onVerificationSent(email);
                         break;
+                    case GENERIC_ERROR:
+                        generic = true;
                     case ERROR_CONNECTION:
                         if (getActivity() != null)
-                            Snackbar.make(getActivity().findViewById(android.R.id.content),"Could not connect to the server.",Snackbar.LENGTH_INDEFINITE)
+                            Snackbar.make(getActivity().findViewById(android.R.id.content), generic ?  "There was an error" :"Can't connect to the server.",Snackbar.LENGTH_INDEFINITE)
                                     .setAction("Retry", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) { sendVerificationCode(email);
                                         }
                                     });
-                        break;
-                    case GENERIC_ERROR:
-                        if (getActivity() != null)
-                            Snackbar.make(getActivity().findViewById(android.R.id.content),"There was an error.",Snackbar.LENGTH_LONG)
-                                    .setAction("Retry", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) { sendVerificationCode(email);
-                                    }
-                                });
-                        break;
                 }
+                progress.dismiss();
             }
         }, email);
     }

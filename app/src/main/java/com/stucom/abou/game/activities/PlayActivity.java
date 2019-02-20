@@ -14,6 +14,8 @@ import android.widget.ProgressBar;
 import com.stucom.abou.game.activities.bootstrap.StartActivity;
 import com.stucom.abou.game.rest.AccessApi;
 
+import java.util.regex.Pattern;
+
 import alex_bou.stucom.com.alex.R;
 
 public class PlayActivity extends AppCompatActivity {
@@ -44,35 +46,21 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     private boolean validateScore() {
-        if (input.getEditText() != null) {
-            String text = input.getEditText().getText().toString();
-            if (text.equals("") ) {
-                input.setError("Score is required.");
-                return false;
-            } else if (text.length() > 10) {
-                input.setError("Score must have less than 10 digits");
-                return false;
-            }
-            return true;
-        }
-        input.setError("Score is required.");
-        return false;
+        boolean valid = false;
+        if (input.getEditText() != null)
+            valid = Pattern.compile("^\\d{9}$").matcher(input.getEditText().getText()).matches();
+        if (valid)
+            input.setError("Score must have 1 to 9 digits");
+        return valid;
     }
 
     private boolean validateLevel() {
-        if (inputLevel.getEditText() != null) {
-            String text = inputLevel.getEditText().getText().toString();
-            if (text.equals("") ) {
-                inputLevel.setError("Level is required.");
-                return false;
-            } else if (text.length() > 10) {
-                inputLevel.setError("Level must have less than 10 digits");
-                return false;
-            }
-            return true;
-        }
-        inputLevel.setError("Level is required.");
-        return false;
+        boolean valid = false;
+        if (input.getEditText() != null)
+            valid = Pattern.compile("^\\d{9}$").matcher(input.getEditText().getText()).matches();
+        if (valid)
+            input.setError("Level must have 1 to 9 digits");
+        return valid;
     }
 
     private void submitScore() {
@@ -85,6 +73,7 @@ public class PlayActivity extends AppCompatActivity {
         AccessApi.getInstance().submitScore(new AccessApi.ApiListener<Boolean>() {
             @Override
             public void onResult(AccessApi.Result result, @Nullable Boolean data) {
+                boolean generic = false;
                 switch (result) {
                     case OK:
                         Snackbar.make(findViewById(android.R.id.content),"Score sent.",Snackbar.LENGTH_SHORT).show();
@@ -94,8 +83,10 @@ public class PlayActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                         break;
+                    case GENERIC_ERROR:
+                        generic = true;
                     case ERROR_CONNECTION:
-                        Snackbar.make(findViewById(android.R.id.content),"Can't connect to the server.",Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.make(findViewById(android.R.id.content),generic ? "There was an error." : "Error connecting to the server.",Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Retry", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {

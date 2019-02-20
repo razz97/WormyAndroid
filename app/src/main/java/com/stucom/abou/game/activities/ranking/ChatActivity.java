@@ -1,5 +1,6 @@
 package com.stucom.abou.game.activities.ranking;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -53,15 +55,15 @@ public class ChatActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
+        userId = getIntent().getIntExtra("id",0);
+        userName = getIntent().getStringExtra("name");
+        userImage = getIntent().getStringExtra("image");
+        bindViews();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        userId = getIntent().getIntExtra("id",0);
-        userName = getIntent().getStringExtra("name");
-        userImage = getIntent().getStringExtra("image");
-        bindViews();
         handler.postDelayed(runnable,0);
     }
 
@@ -96,43 +98,65 @@ public class ChatActivity extends AppCompatActivity  {
     }
 
     private void sendMessage(final String message) {
+        final ProgressDialog progress = ProgressDialog.show(this,null,null);
+        progress.setContentView(new ProgressBar(this));
+        progress.setCancelable(false);
+        progress.show();
+        if (input.getEditText() != null)
             input.getEditText().setText("");
-            AccessApi.getInstance().sendMessage(new AccessApi.ApiListener<Boolean>() {
-                @Override
-                public void onResult(AccessApi.Result result, @Nullable Boolean data) {
-                    switch (result) {
-                        case OK:
-                            refreshMessages();
-                            break;
-                        case ERROR_CONNECTION:
-                            Snackbar.make(findViewById(android.R.id.content),"Can't connect to the server.",Snackbar.LENGTH_INDEFINITE)
-                                    .setAction("Retry", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            sendMessage(message);
-                                        }
-                                    }).show();
-                            break;
-                        case ERROR_TOKEN:
-                            Intent intent = new Intent(ChatActivity.this, StartActivity.class);
-                            startActivity(intent);
-                            finish();
-                    }
+        AccessApi.getInstance().sendMessage(new AccessApi.ApiListener<Boolean>() {
+            @Override
+            public void onResult(AccessApi.Result result, @Nullable Boolean data) {
+                boolean generic = false;
+                switch (result) {
+                    case OK:
+                        refreshMessages();
+                        break;
+                    case GENERIC_ERROR:
+                        generic = true;
+                    case ERROR_CONNECTION:
+                        Snackbar.make(findViewById(android.R.id.content),generic ? "There was an error." : "Can't connect to the server.",Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Retry", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {sendMessage(message);
+                                    }
+                                }).show();
+                        break;
+                    case ERROR_TOKEN:
+                        Intent intent = new Intent(ChatActivity.this, StartActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
                 }
-            }, userId, message);
+                progress.dismiss();
+            }
+        }, userId, message);
     }
 
     private void refreshMessages() {
         AccessApi.getInstance().getMessages(new AccessApi.ApiListener<List<Message>>() {
             @Override
             public void onResult(AccessApi.Result result, @Nullable List<Message> data) {
+                boolean generic = false;
                 switch (result) {
                     case OK:
-                        Log.d("infoDebug", "refreshed");
                         MessagesAdapter messagesAdapter = new MessagesAdapter(data);
                         recyclerView.setAdapter(messagesAdapter);
                         recyclerView.scrollToPosition(data.size() -1);
                         break;
+                    case ERROR_TOKEN:
+                        Intent intent = new Intent(ChatActivity.this, StartActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case GENERIC_ERROR:
+                        generic = true;
+                    case ERROR_CONNECTION:
+                        handler.removeCallbacks(runnable);
+                        Snackbar.make(findViewById(android.R.id.content), generic ? "There was an error" :"Error connecting to the server.",Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Retry", new View.OnClickListener() {
+                                    @Override public void onClick(View v) {handler.postDelayed(runnable,0); }
+                                }).show();
                 }
             }
         }, userId);
@@ -167,7 +191,7 @@ public class ChatActivity extends AppCompatActivity  {
         public MessagesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
             View view = LayoutInflater.from(parent.getContext()).
                     inflate(
-                            messages.get(position).getFromId() != LoggedUser.getInstance().getId() ? R.layout.message_received : R.layout.message_sent,
+                            messages.get(position).getFromId() != LoggedUser.getInstance().getId() ? R.layout.item_message_received : R.layout.item_message_sent,
                             parent,
                             false
                     );
