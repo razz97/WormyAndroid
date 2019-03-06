@@ -40,4 +40,6 @@
     <string name="change_email">Change email</string>
     <string name="message_sent_status">Status of the message sent</string>
     <string name="text_image_user">Image of the user</string>
+    <string name="new_game">New Game</string>
+    <string name="you_lost">You lost</string>
 </resources>
