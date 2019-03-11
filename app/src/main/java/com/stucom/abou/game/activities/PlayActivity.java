@@ -2,11 +2,17 @@ package com.stucom.abou.game.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -18,17 +24,17 @@ import com.stucom.abou.game.activities.bootstrap.StartActivity;
 import com.stucom.abou.game.rest.AccessApi;
 import com.stucom.abou.game.views.WormyView;
 
-import java.util.regex.Pattern;
 
 import alex_bou.stucom.com.alex.R;
 
-public class PlayActivity extends AppCompatActivity implements WormyView.WormyListener {
+public class PlayActivity extends AppCompatActivity implements WormyView.WormyListener, SensorEventListener {
 
-    TextInputLayout input ;
-    TextInputLayout inputLevel;
-    Button button;
     private WormyView wormyView;
     private TextView tvScore;
+    private SensorManager sensorManager;
+    private MediaPlayer mediaPlayer;
+    private SoundPool soundPool;
+    private int coin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,22 +51,29 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
             }
         });
         wormyView.setWormyListener(this);
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        // FIXME: Set proper resource for media player.
+        mediaPlayer = MediaPlayer.create(this, R.raw.a);
+        soundPool = new SoundPool.Builder().build();
+        coin = soundPool.load(this, R.raw.a,1);
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        /*
-        input = findViewById(R.id.inputScore);
-        inputLevel = findViewById(R.id.inputLevel);
-        button = findViewById(R.id.buttonSubmit);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateLevel() && validateScore())
-                    submitScore();
-            }
-        }); */
+        mediaPlayer.start();
+        // Connect the sensor's listener to the view
+        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if (sensor != null) {
+            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
+        }
+    }
+    @Override
+    public void onPause() {
+        // Nicely disconnect the sensor's listener from the view
+        mediaPlayer.stop();
+        sensorManager.unregisterListener(this);
+        super.onPause();
     }
 
     @Override
@@ -76,30 +89,14 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
 
     @Override
     public void scoreUpdated(View view, int score) {
+        soundPool.play(coin,100,100,1,0,1);
         tvScore.setText(String.valueOf(score));
     }
 
     @Override
     public void gameLost(View view) {
         Toast.makeText(this, getString(R.string.you_lost), Toast.LENGTH_LONG).show();
-    }
-
-    private boolean validateScore() {
-        boolean valid = false;
-        if (input.getEditText() != null)
-            valid = Pattern.compile("^\\s*-?[0-9]{1,9}\\s*$").matcher(input.getEditText().getText()).matches();
-        if (!valid)
-            input.setError("Score must have 1 to 9 digits");
-        return valid;
-    }
-
-    private boolean validateLevel() {
-        boolean valid = false;
-        if (inputLevel.getEditText() != null)
-            valid = Pattern.compile("^\\s*-?[0-9]{1,9}\\s*$").matcher(inputLevel.getEditText().getText()).matches();
-        if (!valid)
-            inputLevel.setError("Level must have 1 to 9 digits");
-        return valid;
+        submitScore();
     }
 
     private void submitScore() {
@@ -107,8 +104,8 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
         progress.setContentView(new ProgressBar(this));
         progress.setCancelable(false);
         progress.show();
-        long score = Long.parseLong(input.getEditText().getText().toString());
-        int level = Integer.parseInt(inputLevel.getEditText().getText().toString());
+        long score = Long.parseLong(tvScore.getText().toString());
+        int level = 0;
         AccessApi.getInstance().submitScore(new AccessApi.ApiListener<Boolean>() {
             @Override
             public void onResult(AccessApi.Result result, @Nullable Boolean data) {
@@ -137,4 +134,14 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
             }
         }, score, level);
     }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        Log.d("infoDebug","sensor changed");
+        wormyView.update(-event.values[0], event.values[1]);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+
 }

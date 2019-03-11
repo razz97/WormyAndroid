@@ -44,7 +44,8 @@
             android:label="@string/btnSetting" />
         <activity
             android:name="com.stucom.abou.game.activities.PlayActivity"
-            android:label="@string/btnPlay" />
+            android:label="@string/btnPlay"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.stucom.abou.game.activities.ranking.RankingActivity"
             android:label="@string/btnRanking" />
