@@ -10,18 +10,18 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.stucom.abou.game.activities.bootstrap.StartActivity;
 import com.stucom.abou.game.rest.AccessApi;
+import com.stucom.abou.game.utils.Media;
 import com.stucom.abou.game.views.WormyView;
 
 
@@ -32,11 +32,6 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
     private WormyView wormyView;
     private TextView tvScore;
     private SensorManager sensorManager;
-    private MediaPlayer mediaPlayer;
-    private SoundPool soundPool;
-    private int coin;
-    private int over;
-    private int game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,26 +43,22 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
         btnNewGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Media.getInstance().startGame();
                 tvScore.setText("0");
                 wormyView.newGame();
             }
         });
         wormyView.setWormyListener(this);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mediaPlayer = MediaPlayer.create(this, R.raw.menu);
-        mediaPlayer.setLooping(true);
-        soundPool = new SoundPool.Builder().build();
-        coin = soundPool.load(this, R.raw.coin,1);
-        over = soundPool.load(this, R.raw.over,1);
-        game = soundPool.load(this, R.raw.game,1);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mediaPlayer.seekTo(0);
-        mediaPlayer.start();
-        // Connect the sensor's listener to the view
+        if (wormyView.isPlaying())
+            Media.getInstance().startGame();
+        else
+            Media.getInstance().startMenu();
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (sensor != null) {
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI);
@@ -75,8 +66,7 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
     }
     @Override
     public void onPause() {
-        // Nicely disconnect the sensor's listener from the view
-        mediaPlayer.pause();
+        Media.getInstance().stopAll();
         sensorManager.unregisterListener(this);
         super.onPause();
     }
@@ -94,13 +84,13 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
 
     @Override
     public void scoreUpdated(View view, int score) {
-        soundPool.play(coin,1,1,1,0,1);
+        Media.getInstance().coin();
         tvScore.setText(String.valueOf(score));
     }
 
     @Override
     public void gameLost(View view) {
-        soundPool.play(over,1,1,1,0,1);
+        Media.getInstance().gameOver();
         submitScore();
     }
 
@@ -142,7 +132,6 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        Log.d("infoDebug","sensor changed");
         wormyView.update(-event.values[0], event.values[1]);
     }
 

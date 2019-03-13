@@ -22,6 +22,10 @@ public class WormyView extends View {
     private Paint paint;
     private Bitmap tiles, wormLeft, wormRight, worm;
 
+    public boolean isPlaying() {
+        return playing;
+    }
+
     public WormyView(Context context) { this(context, null, 0); }
     public WormyView(Context context, AttributeSet attrs) { this(context, attrs, 0); }
     public WormyView(Context context, AttributeSet attrs, int defStyleAttr) {

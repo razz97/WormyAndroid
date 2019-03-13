@@ -24,9 +24,12 @@
         <activity
             android:name="com.stucom.abou.game.activities.ranking.HistoryActivity"
             android:label="History" />
-        <activity android:name="com.stucom.abou.game.activities.ranking.ChatActivity" android:label="Chat"/>
-        <activity android:name="com.stucom.abou.game.activities.bootstrap.StartActivity"
-                            android:theme="@style/SplashTheme">
+        <activity
+            android:name="com.stucom.abou.game.activities.ranking.ChatActivity"
+            android:label="Chat" />
+        <activity
+            android:name="com.stucom.abou.game.activities.bootstrap.StartActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,14 +41,16 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name="com.stucom.abou.game.activities.MainActivity" android:label="Menu"/>
+        <activity
+            android:name="com.stucom.abou.game.activities.MainActivity"
+            android:label="Menu" />
         <activity
             android:name="com.stucom.abou.game.activities.SettingActivity"
             android:label="@string/btnSetting" />
         <activity
             android:name="com.stucom.abou.game.activities.PlayActivity"
             android:label="@string/btnPlay"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.stucom.abou.game.activities.ranking.RankingActivity"
             android:label="@string/btnRanking" />
