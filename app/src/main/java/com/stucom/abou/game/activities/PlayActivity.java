@@ -35,6 +35,8 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
     private MediaPlayer mediaPlayer;
     private SoundPool soundPool;
     private int coin;
+    private int over;
+    private int game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +54,18 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
         });
         wormyView.setWormyListener(this);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        // FIXME: Set proper resource for media player.
-        mediaPlayer = MediaPlayer.create(this, R.raw.a);
+        mediaPlayer = MediaPlayer.create(this, R.raw.menu);
+        mediaPlayer.setLooping(true);
         soundPool = new SoundPool.Builder().build();
-        coin = soundPool.load(this, R.raw.a,1);
+        coin = soundPool.load(this, R.raw.coin,1);
+        over = soundPool.load(this, R.raw.over,1);
+        game = soundPool.load(this, R.raw.game,1);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mediaPlayer.seekTo(0);
         mediaPlayer.start();
         // Connect the sensor's listener to the view
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -71,7 +76,7 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
     @Override
     public void onPause() {
         // Nicely disconnect the sensor's listener from the view
-        mediaPlayer.stop();
+        mediaPlayer.pause();
         sensorManager.unregisterListener(this);
         super.onPause();
     }
@@ -89,13 +94,13 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
 
     @Override
     public void scoreUpdated(View view, int score) {
-        soundPool.play(coin,100,100,1,0,1);
+        soundPool.play(coin,1,1,1,0,1);
         tvScore.setText(String.valueOf(score));
     }
 
     @Override
     public void gameLost(View view) {
-        Toast.makeText(this, getString(R.string.you_lost), Toast.LENGTH_LONG).show();
+        soundPool.play(over,1,1,1,0,1);
         submitScore();
     }
 
