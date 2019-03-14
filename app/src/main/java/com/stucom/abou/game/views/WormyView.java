@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -20,7 +21,9 @@ public class WormyView extends View {
     private boolean playing = false;
     private char map[];
     private Paint paint;
-    private Bitmap tiles, wormLeft, wormRight, worm;
+    private Paint paintText;
+    private Bitmap tiles, wormLeft, wormRight, worm, heart;
+    private int lives = 3;
 
     public boolean isPlaying() {
         return playing;
@@ -34,10 +37,18 @@ public class WormyView extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.BLACK);
         paint.setStrokeWidth(3.0f);
+        paintText = new Paint();
+        paintText.setColor(Color.WHITE);
+        paintText.setTextSize(45);
         tiles = BitmapFactory.decodeResource(getResources(), R.drawable.tiles);
         wormLeft = BitmapFactory.decodeResource(getResources(), R.drawable.worm_left);
         wormRight = BitmapFactory.decodeResource(getResources(), R.drawable.worm_right);
+        heart = BitmapFactory.decodeResource(getResources(), R.drawable.heart);
         worm = wormLeft;
+    }
+
+    public int getTopMargin() {
+        return top;
     }
 
     @Override public void onMeasure(int specW, int specH) {
@@ -63,6 +74,7 @@ public class WormyView extends View {
         slowdown = SLOW_DOWN;
         score = 0;
         playing = true;
+        lives = 3;
         resetMap(true);
     }
 
@@ -143,8 +155,29 @@ public class WormyView extends View {
         canvas.drawBitmap(worm, src, dst, paint);
     }
 
+    private void drawLives(Canvas canvas) {
+        for (int i = 1; i <= lives; i++) {
+            Matrix matrix = new Matrix();
+            matrix.postScale(((float) TILE_SIZE)/heart.getWidth(),((float) TILE_SIZE)/heart.getHeight());
+            matrix.postTranslate(left + TILE_SIZE * i,top);
+            canvas.drawBitmap(heart ,matrix,paint);
+        }
+    }
+
+    private void drawScore(Canvas canvas) {
+        String text = "Score: " + score;
+
+        Rect bounds = new Rect();
+        paintText.getTextBounds(text, 0, text.length(), bounds);
+
+        int x = left + TILE_SIZE * nCols / 2 - bounds.width() /2;
+        int y = top + TILE_SIZE * nRows - ((TILE_SIZE - bounds.height()) /2);
+
+        canvas.drawText(text, x, y, paintText);
+    }
+
     @Override public void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(Color.GRAY);
         if (map == null) return;
         int idx = 0, x, y = top;
         for (int i = 0; i < nRows; i++) {
@@ -171,6 +204,8 @@ public class WormyView extends View {
             y += TILE_SIZE;
         }
         drawWorm(canvas, left + wormX * TILE_SIZE, top + wormY * TILE_SIZE);
+        drawScore(canvas);
+        drawLives(canvas);
         canvas.drawRect(left, top, right, bottom, paint);
     }
 
@@ -202,8 +237,14 @@ public class WormyView extends View {
                 }
                 else if ((map[idx] >= 'P') && (map[idx] <= 'S')) {
                     // Plant touched!
-                    playing = false;
-                    if (listener != null) listener.gameLost(this);
+                    lives--;
+                    if (lives <= 0) {
+                        playing = false;
+                        if (listener != null) listener.gameLost(this);
+                    } else {
+                        map[idx] = ' ';
+                        if (listener != null) listener.lifeLost(this);
+                    }
                 }
             }
         }
@@ -212,6 +253,7 @@ public class WormyView extends View {
 
     public interface WormyListener {
         void scoreUpdated(View view, int score);
+        void lifeLost(View view);
         void gameLost(View view);
     }
 

@@ -1,6 +1,7 @@
 package com.stucom.abou.game.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,12 +10,17 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,24 +36,22 @@ import alex_bou.stucom.com.alex.R;
 public class PlayActivity extends AppCompatActivity implements WormyView.WormyListener, SensorEventListener {
 
     private WormyView wormyView;
-    private TextView tvScore;
     private SensorManager sensorManager;
+    Button btnNewGame;
+    private int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_play);
         wormyView = findViewById(R.id.wormyView);
-        Button btnNewGame = findViewById(R.id.btnNewGame);
-        tvScore = findViewById(R.id.tvScore);
+        btnNewGame = findViewById(R.id.btnNewGame);
+        ConstraintLayout.LayoutParams newLayoutParams = (ConstraintLayout.LayoutParams) btnNewGame.getLayoutParams();
+        newLayoutParams.topMargin = wormyView.getTopMargin();
+        btnNewGame.setLayoutParams(newLayoutParams);
         btnNewGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Media.getInstance().startGame();
-                tvScore.setText("0");
-                wormyView.newGame();
-            }
-        });
+            @Override public void onClick(View v) {newGame();}});
         wormyView.setWormyListener(this);
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
     }
@@ -72,26 +76,26 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        switch(event.getKeyCode()) {
-            case KeyEvent.KEYCODE_A: wormyView.update(0, +10); break;
-            case KeyEvent.KEYCODE_Q: wormyView.update(0, -10); break;
-            case KeyEvent.KEYCODE_O: wormyView.update(-10, 0); break;
-            case KeyEvent.KEYCODE_P: wormyView.update(+10, 0); break;
-        }
-        return super.dispatchKeyEvent(event);
+    public void scoreUpdated(View view, int score) {
+        Media.getInstance().coin();
+        this.score = score;
     }
 
     @Override
-    public void scoreUpdated(View view, int score) {
-        Media.getInstance().coin();
-        tvScore.setText(String.valueOf(score));
+    public void lifeLost(View view) {
+        Media.getInstance().life();
     }
 
     @Override
     public void gameLost(View view) {
         Media.getInstance().gameOver();
         submitScore();
+        showdialogPlayAgain();
+    }
+
+    private void newGame() {
+        Media.getInstance().startGame();
+        wormyView.newGame();
     }
 
     private void submitScore() {
@@ -99,7 +103,7 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
         progress.setContentView(new ProgressBar(this));
         progress.setCancelable(false);
         progress.show();
-        long score = Long.parseLong(tvScore.getText().toString());
+        long score = this.score;
         int level = 0;
         AccessApi.getInstance().submitScore(new AccessApi.ApiListener<Boolean>() {
             @Override
@@ -138,4 +142,19 @@ public class PlayActivity extends AppCompatActivity implements WormyView.WormyLi
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
+    private void showdialogPlayAgain() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Do you want to play again? ");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                newGame();
+            }
+        });
+        builder.setNegativeButton("Maybe later", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) { dialog.dismiss(); startActivity(new Intent(PlayActivity.this,MainActivity.class)); }
+        });
+        builder.create().show();
+    }
 }

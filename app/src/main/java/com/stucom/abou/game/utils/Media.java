@@ -14,7 +14,7 @@ public class Media {
     private SoundPool soundPool;
     private int coin;
     private int over;
-    private int game;
+    private int life;
 
     public static Media getInstance() {
         return ourInstance;
@@ -22,11 +22,13 @@ public class Media {
 
     private Media() {
         playerMenu = MediaPlayer.create(App.getAppContext(), R.raw.menu);
+        playerMenu.setLooping(true);
         playerGame = MediaPlayer.create(App.getAppContext(), R.raw.game);
+        playerGame.setLooping(true);
         soundPool = new SoundPool.Builder().build();
         coin = soundPool.load(App.getAppContext(), R.raw.coin,1);
         over = soundPool.load(App.getAppContext(), R.raw.over,1);
-        game = soundPool.load(App.getAppContext(), R.raw.game,1);
+        life = soundPool.load(App.getAppContext(), R.raw.over, 1);
     }
 
     public void startMenu() {
@@ -41,6 +43,7 @@ public class Media {
 
     public void startGame() {
         playerMenu.pause();
+        playerGame.seekTo(0);
         playerGame.start();
     }
 
@@ -55,9 +58,14 @@ public class Media {
     }
 
     public void stopAll() {
-        playerMenu.pause();
-        playerGame.pause();
+        if (playerGame.isPlaying())
+            playerGame.pause();
+        if (playerMenu.isPlaying())
+            playerMenu.pause();
     }
 
 
+    public void life() {
+        soundPool.play(over,1,1,1,0,1);
+    }
 }

@@ -32,7 +32,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -49,6 +48,7 @@
             android:label="@string/btnSetting" />
         <activity
             android:name="com.stucom.abou.game.activities.PlayActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/btnPlay"
             android:screenOrientation="portrait" />
         <activity
